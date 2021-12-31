@@ -33,6 +33,6 @@ def create_app(test_config=None):
 
     from .api import user_account
     app.register_blueprint(user_account.bp)
-    # app.register_blueprint(tweets.bp)
+    # app.register_blueprint(companion.bp)
 
     return app

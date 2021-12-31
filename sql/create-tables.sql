@@ -10,11 +10,11 @@ DROP TABLE IF EXISTS user_account;
 
 -- create the user_account table
 CREATE TABLE user_account (
-	user_id SERIAL PRIMARY KEY,
-	phone_number TEXT NOT NULL UNIQUE,
-	email TEXT NOT NULL UNIQUE,
-	registration_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-	birthday TEXT
+    user_id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    phone_number TEXT NOT NULL UNIQUE,
+    birthday TEXT
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 );
 
 -- create location tables city and country
