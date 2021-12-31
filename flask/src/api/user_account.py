@@ -3,12 +3,20 @@ from flask import Blueprint, jsonify, abort, request
 from ..models import User_Account, db
 import hashlib
 import secrets
+import re
 
 
 def scramble(password: str):
     """Hash and salt the given password"""
     salt = secrets.token_hex(16)
     return hashlib.sha512((password + salt).encode('utf-8')).hexdigest()
+
+
+def validateEmail(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if(re.fullmatch(regex, email)):
+        return True
+    return False
 
 
 bp = Blueprint('users', __name__, url_prefix='/users')
@@ -31,18 +39,24 @@ def show(id: int):
 
 @bp.route('', methods=['POST'])
 def create():
-    if 'username' not in request.json or 'password' not in request.json:
-        return abort(400)
+    if 'email' not in request.json or 'password' not in request.json or 'phone_number' not in request.json or 'birthday' not in request.json:
+        return abort(400, f"400 ERROR: please ensure an email, password, phone number, and birthday are provided within the POST body.")
 
-    username = request.json['username']
+    email = request.json['email']
     password = request.json['password']
+    phone_number = request.json['phone_number']
+    birthday = request.json['birthday']
 
-    if len(username) < 3 or len(password) < 8:
-        return abort(400)
+    # if len(password) < 8:
+    if not validateEmail(email) or len(password) < 8:
+        # print(validateEmail(email))
+        return abort(400, f"400 ERROR: failed at email/password validation. Email provided: {email}")
 
     user = User_Account(
-        username=username,
-        password=scramble(password)
+        email=email,
+        password=scramble(password),
+        phone_number=phone_number,
+        birthday=birthday
     )
 
     db.session.add(user)

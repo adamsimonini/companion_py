@@ -1,15 +1,19 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime
-from sqlalchemy.orm import sessionmaker, declarative_base
+# from sqlalchemy import create_engine, Column, Integer, String, DateTime
+# from sqlalchemy.orm import sessionmaker, declarative_base
 from datetime import datetime
 
+from flask_sqlalchemy import SQLAlchemy
+
 # Connect to Postgres database
-engine = create_engine('postgresql://postgres@localhost:5432/companion')
-Session = sessionmaker(bind=engine)
-Base = declarative_base()
+# engine = create_engine('postgresql://postgres@localhost:5432/companion')
+# Session = sessionmaker(bind=engine)
+# Base = declarative_base()
+
+db = SQLAlchemy()
 
 
-class User_Account(Base):
-    def __init__(self, password: str, phone_number: str, email: str, birthday: datetime):
+class User_Account(db.Model):
+    def __init__(self, email: str, password: str, phone_number: str, birthday: datetime):
         self.password = password
         self.phone_number = phone_number
         self.email = email
@@ -18,17 +22,18 @@ class User_Account(Base):
     __tablename__ = "user_account"
 
     # set autoincrement to use the SERIAL data type
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    password = Column(String, nullable=False)
-    phone_number = Column(String, unique=True, nullable=False, )
-    email = Column(String, unique=True, nullable=False)
-    birthday = Column(String, nullable=False)
-    created_at = Column(DateTime(timezone=True), default=datetime.now())
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    password = db.Column(db.String, nullable=False)
+    phone_number = db.Column(db.String, unique=True, nullable=False, )
+    email = db.Column(db.String, unique=True, nullable=False)
+    birthday = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.now())
 
     def serialize(self):
         return {
             'id': self.id,
             'email': self.email,
+            'password': self.password,
             'phone_number': self.phone_number,
             'birthday': self.birthday,
             'created_at': self.created_at
@@ -36,8 +41,8 @@ class User_Account(Base):
 
 
 # Recreate all tables each time script is run
-Base.metadata.drop_all(engine)
-Base.metadata.create_all(engine)
+# Base.metadata.drop_all(engine)
+# Base.metadata.create_all(engine)
 
 user_account_seed = [
     {'password': 'abcdefg', 'phone_number': '1231231234', 'email': 'abc@g.com', 'birthday': '1990-01-01'},
@@ -59,6 +64,6 @@ for user in user_account_seed:
     user_objs.append(u)
 
 # Create a session, insert new records, and commit the session
-session = Session()
-session.bulk_save_objects(user_objs)
-session.commit()
+# session = db.Session()
+# session.bulk_save_objects(user_objs)
+# session.commit()
