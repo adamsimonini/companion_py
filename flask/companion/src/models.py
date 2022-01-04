@@ -38,6 +38,7 @@ class User_Account(db.Model):
     )
 
     companion = db.relationship('Companion', backref='user_account', cascade="all,delete")
+    patron = db.relationship('Patron', backref='user_account', cascade="all,delete")
 
     def serialize(self):
         return {
@@ -54,9 +55,11 @@ class User_Account(db.Model):
 
 
 class Companion(db.Model):
-    def __init__(self, name: str, sex: str, hourly_rate=30, is_active=False):
+    def __init__(self, name: str, sex: str, user_id: int, city_id: int, hourly_rate=30, is_active=False):
         self.name = name
         self.sex = sex,
+        self.fk_user_account_id = user_id,
+        self.fk_city_id = city_id,
         self.hourly_rate = hourly_rate,
         self.is_active = is_active
 
@@ -64,6 +67,8 @@ class Companion(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     sex = db.Column(db.String(50), nullable=False)
+    fk_user_account_id = db.Column(db.SmallInteger(), nullable=False, unique=True)
+    fk_city_id = db.Column(db.SmallInteger(), nullable=False)
     hourly_rate = db.Column(db.SmallInteger(), nullable=False)
     is_active = db.Column(db.Boolean(), nullable=False)
     created_at = db.Column(
@@ -84,6 +89,35 @@ class Companion(db.Model):
             'created_at': self.created_at.isoformat(),
         }
 
+
+class Patron(db.Model):
+    def __init__(self, name: str, sex: str, user_id: int, city_id: int):
+        self.name = name
+        self.sex = sex
+        self.fk_user_account_id = user_id,
+        self.fk_city_id = city_id,
+
+    __tablename__ = 'patron'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    sex = db.Column(db.String(50), nullable=False)
+    fk_user_account_id = db.Column(db.SmallInteger(), nullable=False, unique=True)
+    fk_city_id = db.Column(db.SmallInteger(), nullable=False)
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow,
+        nullable=False
+    )
+    # Use the db.ForeignKey method provided by Flask to ensure that every companion has one user_account
+    fk_user_account_id = db.Column(db.Integer, db.ForeignKey('user_account.id'), nullable=False)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'sex': self.sex,
+            'created_at': self.created_at.isoformat(),
+        }
 
 # # Recreate all tables each time script is run
 # Base.metadata.drop_all(engine)

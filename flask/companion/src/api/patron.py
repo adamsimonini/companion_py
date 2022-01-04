@@ -1,26 +1,26 @@
 #!/usr/bin/python3
 from flask import Blueprint, jsonify, abort, request
-from ..models import Companion, db
+from ..models import Patron, db
 import hashlib
 import secrets
 import re
 
-bp = Blueprint('companions', __name__, url_prefix='/companions')
+bp = Blueprint('patrons', __name__, url_prefix='/patrons')
 
 
 @bp.route('', methods=['GET'])  # decorator takes path and list of HTTP verbs.
 def index():
-    companions = Companion.query.all()  # ORM performs SELECT query
+    patrons = Patron.query.all()  # ORM performs SELECT query
     result = []
-    for companion in companions:
-        result.append(companion.serialize())  # Build a list of Tweets as dictionaires
+    for patron in patrons:
+        result.append(patron.serialize())  # Build a list of Tweets as dictionaires
     return jsonify(result)  # Return JSON response
 
 
 @bp.route('/<int:id>', methods=['GET'])
 def show(id: int):
-    companion = Companion.query.get_or_404(id)
-    return jsonify(companion.serialize())  # Return JSON response
+    patron = Patron.query.get_or_404(id)
+    return jsonify(patron.serialize())  # Return JSON response
 
 
 @bp.route('', methods=['POST'])
@@ -33,7 +33,7 @@ def create():
     user_id = request.json['user_id']
     city_id = request.json['city_id']
 
-    companion = Companion(
+    patron = Patron(
         name=name,
         sex=sex,
         user_id=user_id,
@@ -41,18 +41,18 @@ def create():
     )
 
     try:
-        db.session.add(companion)
+        db.session.add(patron)
         db.session.commit()
-        return jsonify(companion.serialize())
+        return jsonify(patron.serialize())
     except:
-        return abort(400, f"400 ERROR: please ensure that the targetted user ID does not already have a companion associated with it.")
+        return abort(400, f"400 ERROR: please ensure that the targetted user ID does not already have a patron associated with it.")
 
 
 @bp.route('/<int:id>', methods=['DELETE'])
 def delete(id: int):
-    companion = Companion.query.get_or_404(id)
+    patron = Patron.query.get_or_404(id)
     try:
-        db.session.delete(companion)  # prepare DELETE statement
+        db.session.delete(patron)  # prepare DELETE statement
         db.session.commit()  # execute DELETE statement
         return jsonify(True)
     except:
