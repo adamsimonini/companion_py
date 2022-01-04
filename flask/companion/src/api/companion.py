@@ -50,17 +50,17 @@ def show(id: int):
 #     return jsonify(user.serialize())
 
 
-# @bp.route('/<int:id>', methods=['DELETE'])
-# def delete(id: int):
-#     print(id)
-#     user = User_Account.query.get_or_404(id)
-#     try:
-#         db.session.delete(user)  # prepare DELETE statement
-#         db.session.commit()  # execute DELETE statement
-#         return jsonify(True)
-#     except:
-#         # something went wrong
-#         return jsonify(False)
+@bp.route('/<int:id>', methods=['DELETE'])
+def delete(id: int):
+    print(id)
+    user = Companion.query.get_or_404(id)
+    try:
+        db.session.delete(user)  # prepare DELETE statement
+        db.session.commit()  # execute DELETE statement
+        return jsonify(True)
+    except:
+        # something went wrong
+        return jsonify(False)
 
 
 # @bp.route('/<int:id>', methods=['PATCH', 'PUT'])
