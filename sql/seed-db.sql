@@ -6,7 +6,7 @@ SELECT * FROM country;
 INSERT INTO city (city_name, fk_country_id) VALUES ('Toronto', 1), ('Los Angeles', 2), ('Mexico City', 3), ('Rome', 4), ('Tokyo', 5);
 
 SELECT city_name, country_name FROM city
-LEFT JOIN country ON fk_country_id = country_id;
+LEFT JOIN country ON city.fk_country_id = country.id;
 
 -- SEXUAL ORIENTATIONS
 INSERT INTO sexual_orientation (sexual_oreitnation_name) VALUES ('Straight'), ('Gay'), ('Bisexual'), ('Queer'), ('Asexual');
@@ -15,13 +15,16 @@ SELECT * FROM sexual_orientation;
 
 
 -- USERS
-INSERT INTO user_account (phone_number, email, registration_date, birthday) VALUES ('444-555-1234', 'julia@gmail.com', DEFAULT, '1994-08-15')
+INSERT INTO user_account (email, password, phone_number, birthday) VALUES 
+('efg@g.com', 'abcdefg', '4445556666', '1980-01-01'),
+('hij@g.com', 'abcdefg', '2223334455', '1977-01-01'),
+('lmn@g.com', 'abcdefg', '9998887766', '1998-01-01'),
+('opq@g.com', 'abcdefg', '5556667788', '1988-01-01');
 
-SELECT * FROM user_account    
+SELECT * FROM user_account;
 
 -- COMPANIONS
-INSERT INTO companion (companion_name, is_active, hourly_rate, gender, fk_user_id, fk_city_id) VALUES 
-('Julia', true, 30, 'female', 1, 1),
--- ('Alexis', false, 35, 'female', 3, 2);
+INSERT INTO companion (name, sex, hourly_rate, is_active, fk_user_account_id, fk_city_id) VALUES 
+('Julia', 'female', 30, false, 1, 1), ('Alexis', 'female', 35, true, 2, 3);
 
-SELECT * FROM companion
+SELECT * FROM companion;

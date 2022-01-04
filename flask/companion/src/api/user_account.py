@@ -5,6 +5,8 @@ import hashlib
 import secrets
 import re
 
+bp = Blueprint('users', __name__, url_prefix='/users')
+
 
 def scramble(password: str):
     """Hash and salt the given password"""
@@ -17,9 +19,6 @@ def validateEmail(email):
     if(re.fullmatch(regex, email)):
         return True
     return False
-
-
-bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('', methods=['GET'])  # decorator takes path and list of HTTP verbs.
@@ -66,6 +65,7 @@ def create():
 
 @bp.route('/<int:id>', methods=['DELETE'])
 def delete(id: int):
+    print(id)
     user = User_Account.query.get_or_404(id)
     try:
         db.session.delete(user)  # prepare DELETE statement

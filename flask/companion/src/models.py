@@ -54,17 +54,16 @@ class User_Account(db.Model):
 
 
 class Companion(db.Model):
-    def __init__(self, name: str, sex: str, sexual_orientation: str, hourly_rate=30, is_active=False):
+    def __init__(self, name: str, sex: str, hourly_rate=30, is_active=False):
         self.name = name
         self.sex = sex,
-        self.sexual_orientation = sexual_orientation,
         self.hourly_rate = hourly_rate,
         self.is_active = is_active
 
     __tablename__ = 'companion'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
-    sexual_orientation = db.Column(db.String(50), nullable=False)
+    sex = db.Column(db.String(50), nullable=False)
     hourly_rate = db.Column(db.SmallInteger(), nullable=False)
     is_active = db.Column(db.Boolean(), nullable=False)
     created_at = db.Column(
@@ -73,14 +72,16 @@ class Companion(db.Model):
         nullable=False
     )
     # Use the db.ForeignKey method provided by Flask to ensure that every companion has one user_account
-    user_account_id = db.Column(db.Integer, db.ForeignKey('user_account.id'), nullable=False)
+    fk_user_account_id = db.Column(db.Integer, db.ForeignKey('user_account.id'), nullable=False)
 
     def serialize(self):
         return {
             'id': self.id,
-            'content': self.content,
+            'name': self.name,
+            'sex': self.sex,
+            "hourly_rate": self.hourly_rate,
+            'is_active': self.is_active,
             'created_at': self.created_at.isoformat(),
-            'user_id': self.user_id
         }
 
 
