@@ -55,10 +55,11 @@ class User_Account(db.Model):
 
 
 class Companion(db.Model):
-    def __init__(self, name: str, sex: str, user_id: int, city_id: int, hourly_rate=30, is_active=False):
+    def __init__(self, name: str, sex: str, user_id: int, sexual_orientation_id: int, city_id: int, hourly_rate=30, is_active=False):
         self.name = name
         self.sex = sex,
         self.fk_user_account_id = user_id,
+        self.fk_sexual_orientation_id = sexual_orientation_id,
         self.fk_city_id = city_id,
         self.hourly_rate = hourly_rate,
         self.is_active = is_active
@@ -68,6 +69,7 @@ class Companion(db.Model):
     name = db.Column(db.String(100), nullable=False)
     sex = db.Column(db.String(50), nullable=False)
     fk_user_account_id = db.Column(db.SmallInteger(), nullable=False, unique=True)
+    fk_sexual_orientation_id = db.Column(db.SmallInteger(), nullable=False)
     fk_city_id = db.Column(db.SmallInteger(), nullable=False)
     hourly_rate = db.Column(db.SmallInteger(), nullable=False)
     is_active = db.Column(db.Boolean(), nullable=False)
@@ -91,10 +93,11 @@ class Companion(db.Model):
 
 
 class Patron(db.Model):
-    def __init__(self, name: str, sex: str, user_id: int, city_id: int):
+    def __init__(self, name: str, sex: str, user_id: int, sexual_orientation_id: int, city_id: int):
         self.name = name
         self.sex = sex
         self.fk_user_account_id = user_id,
+        self.fk_sexual_orientation_id = sexual_orientation_id,
         self.fk_city_id = city_id,
 
     __tablename__ = 'patron'
@@ -102,6 +105,7 @@ class Patron(db.Model):
     name = db.Column(db.String(100), nullable=False)
     sex = db.Column(db.String(50), nullable=False)
     fk_user_account_id = db.Column(db.SmallInteger(), nullable=False, unique=True)
+    fk_sexual_orientation_id = db.Column(db.SmallInteger(), nullable=False)
     fk_city_id = db.Column(db.SmallInteger(), nullable=False)
     created_at = db.Column(
         db.DateTime,

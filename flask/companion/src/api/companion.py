@@ -25,18 +25,20 @@ def show(id: int):
 
 @bp.route('', methods=['POST'])
 def create():
-    if 'name' not in request.json or 'sex' not in request.json or 'user_id' not in request.json or 'city_id' not in request.json:
-        return abort(400, f"400 ERROR: please ensure the name and sex attributes are provided within the POST body. A user id and city id are also required attributes.")
+    if 'name' not in request.json or 'sex' not in request.json or 'user_id' not in request.json or 'sexual_orientation_id' not in request.json or 'city_id' not in request.json:
+        return abort(400, f"400 ERROR: please ensure the name, sex, and sexual orientation attributes are provided within the POST body. A user id and city id are also required attributes.")
 
     name = request.json['name']
     sex = request.json['sex']
     user_id = request.json['user_id']
+    sexual_orientation_id = request.json['sexual_orientation_id']
     city_id = request.json['city_id']
 
     companion = Companion(
         name=name,
         sex=sex,
         user_id=user_id,
+        sexual_orientation_id=sexual_orientation_id,
         city_id=city_id
     )
 
