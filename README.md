@@ -69,7 +69,7 @@ Example of a valid post request:
 ```
 {
 	"name":"Sabrina",
-    "sex":"female",
+        "sex":"female",
 	"user_id": 4,
 	"sexual_orientation_id": 1,
 	"city_id": 1
@@ -90,7 +90,7 @@ Example of a valid post request:
 ```
 {
 	"name":"Adrian",
-    "sex":"male",
+        "sex":"male",
 	"user_id": 3,
 	"city_id": 3
 }
